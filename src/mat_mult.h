@@ -17,3 +17,8 @@ void mat_mult_v2(float *A, size_t nr_A, size_t nc_A,
 void mat_mult_v3(float *A, size_t nr_A, size_t nc_A,
         float *B, size_t nr_B, size_t nc_B,
         float **C, size_t *nr_C, size_t *nc_C);
+
+// multiply matrix gA with matrix gB, store result in matrix gC
+void mat_mult_gpu(float *gA, size_t nr_A, size_t nc_A,
+        float *gB, size_t nr_B, size_t nc_B,
+        float **gC, size_t *nr_C, size_t *nc_C);

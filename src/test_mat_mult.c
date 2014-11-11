@@ -83,8 +83,18 @@ int main() {
     /** test mat_mult_v3 **/
 
     /** test mat_mult_v2_gpu **/
-    float* gA;
-    cu_safe_malloc(&gA, 100, sizeof(float));
+    float *gA;
+    cu_safe_falloc(&gA, nr_A*nc_A);
+    memcpy_htod(gA, A, nr_A*nc_A);
+
+    float *gB;
+    cu_safe_falloc(&gB, nr_B*nc_B);
+    memcpy_htod(gB, B, nr_B*nc_B);
+
+    float *gC;
+    mat_mult_gpu(gA, nr_A, nc_A, gB, nr_B, nc_B, &gC, &nr_C, &nc_C);
+
+    // free memory
     cu_free(gA);
 
     return 0;

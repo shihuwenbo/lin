@@ -11,8 +11,8 @@ BINS=test_mat_mult
 all: $(BINS)
 
 # main
-test_mat_mult: test_mat_mult.o mat_mult.o utils.o utils_gpu.o
-	$(CC) test_mat_mult.o mat_mult.o utils.o utils_gpu.o \
+test_mat_mult: test_mat_mult.o mat_mult.o mat_mult_gpu.o utils.o utils_gpu.o
+	$(CC) test_mat_mult.o mat_mult.o mat_mult_gpu.o utils.o utils_gpu.o \
 	    -o test_mat_mult $(COPTS) $(NVLIBS)
 
 # main.o

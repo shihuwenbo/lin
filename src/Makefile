@@ -1,21 +1,25 @@
 CC=gcc
 COPTS=-O3 -Wall -std=c99
 
-BINS=main
+BINS=test_mat_mult
 
 all: $(BINS)
 
 # main
-main: main.o lin.o
-	$(CC) main.o lin.o -o main $(COPTS)
+test_mat_mult: test_mat_mult.o mat_mult.o utils.o
+	$(CC) test_mat_mult.o mat_mult.o utils.o -o test_mat_mult $(COPTS)
 
 # main.o
-main.o: main.c
-	$(CC) -c main.c $(COPTS)
+test_mat_mult.o: test_mat_mult.c
+	$(CC) -c test_mat_mult.c $(COPTS)
 
-# lin.o
-lin.o: lin.c lin.h
-	$(CC) -c lin.c $(COPTS)
+# mat_mult.o
+mat_mult.o: mat_mult.c mat_mult.h
+	$(CC) -c mat_mult.c $(COPTS)
+
+# utils.o
+utils.o: utils.c utils.h
+	$(CC) -c utils.c $(COPTS)
 
 clobber:
 	rm -f *.o

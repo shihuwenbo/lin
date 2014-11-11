@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "lin.h"
+#include "mat_mult.h"
+#include "utils.h"
 
 int main() {
 

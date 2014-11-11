@@ -13,3 +13,9 @@ void eye(float **A, size_t nr_A);
 
 // print out a matrix
 void print_mat(float *A, size_t nr_A, size_t nc_A);
+
+// allocate float memory on gpu
+void cu_safe_malloc(float **g_f, size_t n_elem, size_t sizeof_elem);
+
+// free memory on gpu
+void cu_free(void *g_d);

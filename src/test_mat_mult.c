@@ -82,5 +82,10 @@ int main() {
     free(C);
     /** test mat_mult_v3 **/
 
+    /** test mat_mult_v2_gpu **/
+    float* gA;
+    cu_safe_malloc(&gA, 100, sizeof(float));
+    cu_free(gA);
+
     return 0;
 }

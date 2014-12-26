@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "mat_mult.h"
+#include "lin.h"
 #include "utils.h"
 
 int main() {
@@ -9,8 +9,8 @@ int main() {
     /** initialize A **/
     printf("init A\n");
     float *A = NULL;
-    size_t nr_A = 5000;
-    size_t nc_A = 5000;
+    size_t nr_A = 1000;
+    size_t nc_A = 1000;
     rand_mat(&A, nr_A, nc_A);
     /*
     for(size_t i=0; i<nr_A; i++) {
@@ -24,8 +24,8 @@ int main() {
     /** initialize B **/
     printf("init B\n");
     float *B = NULL;
-    size_t nr_B = 5000;
-    size_t nc_B = 5000;
+    size_t nr_B = 1000;
+    size_t nc_B = 1000;
     rand_mat(&B, nr_B, nc_B);
     /*
     for(size_t i=0; i<nr_B; i++) {

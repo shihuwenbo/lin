@@ -1,4 +1,4 @@
-#include "mat_mult_gpu.h"
+#include "lin_gpu.h"
 
 // first version of matrix multiplication
 // use nr_C*nc_C threads to compute A*B

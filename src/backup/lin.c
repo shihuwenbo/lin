@@ -1,4 +1,4 @@
-#include "mat_mult.h"
+#include "lin.h"
 
 // multiply matrix A with matrix B, store result in matrix C
 void mat_mult_v1(float *A, size_t nr_A, size_t nc_A,

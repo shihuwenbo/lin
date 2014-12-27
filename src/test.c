@@ -14,20 +14,22 @@ int main() {
     float tmm1 = 0.0;
     float tmm2 = 0.0;
     float tmm3 = 0.0;
+    float tmm4 = 0.0;
     float tgmm1 = 0.0;
 
     // error measure between h and d
-    float err1 = 0.0;
+    float err_gmm1 = 0.0;
+    float err_mm4 = 0.0;
 
     // initialize A and B
     float *A = NULL;
-    size_t nr_A = 3000;
-    size_t nc_A = 1000;
+    size_t nr_A = 17;
+    size_t nc_A = 13;
     rand_mat(&A, nr_A, nc_A);
 
     float *B = NULL;
-    size_t nr_B = 1000;
-    size_t nc_B = 4000;
+    size_t nr_B = 13;
+    size_t nc_B = 17;
     rand_mat(&B, nr_B, nc_B);
 
     // copy A and B to device
@@ -57,7 +59,7 @@ int main() {
     end = clock();
     tmm2 = ((float)(end-begin))/((float)(CLOCKS_PER_SEC)/1.0e9);
 
-    // test mm2
+    // test mm3
     size_t nr_C3 = nr_A;
     size_t nc_C3 = nc_B;
     float *C3 = (float*) safe_calloc(nr_C3*nc_C3, sizeof(float));
@@ -65,6 +67,21 @@ int main() {
     mm3(A, nr_A, nc_A, B, nr_B, nc_B, C3, nr_C3, nc_C3);
     end = clock();
     tmm3 = ((float)(end-begin))/((float)(CLOCKS_PER_SEC)/1.0e9);
+
+    // test mm4
+    size_t nr_C4 = nr_A;
+    size_t nc_C4 = nc_B;
+    float *C4 = (float*) safe_calloc(nr_C4*nc_C4, sizeof(float));
+    begin = clock();
+    mm4(A, nr_A, nc_A, B, nr_B, nc_B, C4, nr_C4, nc_C4);
+    end = clock();
+    tmm4 = ((float)(end-begin))/((float)(CLOCKS_PER_SEC)/1.0e9);
+
+    // validate mm4
+    for(size_t i=0; i<nr_C4*nc_C4; i++) {
+        float diff = C4[i]-C1[i];
+        err_mm4 += diff*diff;
+    }
 
     // test gmm1
     size_t gnr_C1 = nr_A;
@@ -81,7 +98,7 @@ int main() {
     memcpy_dtoh(vC1, gC1, gnr_C1*gnc_C1);
     for(size_t i=0; i<gnr_C1*gnc_C1; i++) {
         float diff = vC1[i]-C1[i];
-        err1 += diff*diff;
+        err_gmm1 += diff*diff;
     }
 
     // print result
@@ -89,5 +106,6 @@ int main() {
     printf("tmm2: %fns\n", tmm2/1e3);
     printf("tmm3: %fns\n", tmm3/1e3);
     printf("tgmm1: %fns\n", tgmm1/1e3);
-    printf("err1: %f\n", err1);
+    printf("err_gmm1: %f\n", err_gmm1);
+    printf("err_mm4: %f\n", err_mm4);
 }

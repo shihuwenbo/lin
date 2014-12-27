@@ -155,17 +155,18 @@ void mm4(float *A, size_t nr_A, size_t nc_A,
                     ptrb[tr*ncolb+tc] = B[bidx];
                 }
             }
-          
-            // set ncol c equal to ncolb
-            size_t ncolc = ncolb;
+         
+            // make mat mult in shared memory
+            for(size_t ii=0; ii<tilesize_r*ncolc; ii++) {
+            
+                // within tile idex
+                size_t tr = ii/ncolc;
+                size_t tc = ii%ncolc;
 
-            // make multiplication in shared memory
-            for(size_t ii=0; ii<tilesize_r; ii++) {
-                for(size_t jj=0; jj<ncolc; jj++) {
-                    for(size_t kk=0; kk<ncola; kk++){
-                        float prod = ptra[ii*ncola+kk]*ptrb[kk*ncolb+jj];
-                        ptrc[ii*ncolc+jj] += prod;
-                    }
+                // vector dot product
+                for(size_t jj=0; jj<ncola; jj++){
+                    float prod = ptra[tr*ncola+jj]*ptrb[jj*ncolb+tc];
+                    ptrc[tr*ncolc+tc] += prod;
                 }
             }
         }

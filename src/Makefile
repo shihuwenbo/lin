@@ -4,7 +4,7 @@ COPTS=-O3 -Wall -std=c99
 NVCC=nvcc
 NVLIBS=-L/u/local/cuda/current/lib64 -lcuda -lcudart
 NVINCLUDES=-I/usr/local/cuda/include
-NVOPTS=-O3 -arch sm_13 -use_fast_math
+NVOPTS=-O3 -arch sm_13
 
 BINS=test
 

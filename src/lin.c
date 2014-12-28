@@ -172,7 +172,7 @@ void mm4(float *A, size_t nr_A, size_t nc_A,
         }
 
         // write from shared memory to global memory
-        for(size_t ii=0; ii<ntcells_C; ii++) {
+        for(size_t ii=0; ii<tilesize_r*ncolc; ii++) {
             
             // within tile idx
             size_t tr = ii/ncolc;

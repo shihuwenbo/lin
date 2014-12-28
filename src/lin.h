@@ -31,4 +31,9 @@ void gmm1(float *gA, size_t nr_A, size_t nc_A,
         float *gB, size_t nr_B, size_t nc_B,
         float *gC, size_t nr_C, size_t nc_C);
 
+// multiply matrix gA with matrix gB, store result in matrix gC
+void gmm2(float *gA, size_t nr_A, size_t nc_A,
+        float *gB, size_t nr_B, size_t nc_B,
+        float *gC, size_t nr_C, size_t nc_C);
+
 #endif

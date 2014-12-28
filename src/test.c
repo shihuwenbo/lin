@@ -16,20 +16,22 @@ int main() {
     float tmm3 = 0.0;
     float tmm4 = 0.0;
     float tgmm1 = 0.0;
+    float tgmm2 = 0.0;
 
     // error measure between h and d
     float err_gmm1 = 0.0;
+    float err_gmm2 = 0.0;
     float err_mm4 = 0.0;
 
     // initialize A and B
     float *A = NULL;
-    size_t nr_A = 17;
-    size_t nc_A = 13;
+    size_t nr_A = 1024;
+    size_t nc_A = 1024;
     rand_mat(&A, nr_A, nc_A);
 
     float *B = NULL;
-    size_t nr_B = 13;
-    size_t nc_B = 17;
+    size_t nr_B = 1024;
+    size_t nc_B = 1024;
     rand_mat(&B, nr_B, nc_B);
 
     // copy A and B to device
@@ -76,8 +78,6 @@ int main() {
     mm4(A, nr_A, nc_A, B, nr_B, nc_B, C4, nr_C4, nc_C4);
     end = clock();
     tmm4 = ((float)(end-begin))/((float)(CLOCKS_PER_SEC)/1.0e9);
-
-    // validate mm4
     for(size_t i=0; i<nr_C4*nc_C4; i++) {
         float diff = C4[i]-C1[i];
         err_mm4 += diff*diff;
@@ -92,8 +92,6 @@ int main() {
     gmm1(gA, nr_A, nc_A, gB, nr_B, nc_B, gC1, gnr_C1, gnc_C1);
     end = clock();
     tgmm1 = ((float)(end-begin))/((float)(CLOCKS_PER_SEC)/1.0e9);
-
-    // validate gmm1
     float *vC1 = (float*) safe_calloc(gnr_C1*gnc_C1, sizeof(float));
     memcpy_dtoh(vC1, gC1, gnr_C1*gnc_C1);
     for(size_t i=0; i<gnr_C1*gnc_C1; i++) {
@@ -101,11 +99,29 @@ int main() {
         err_gmm1 += diff*diff;
     }
 
+    // test gmm2
+    size_t gnr_C2 = nr_A;
+    size_t gnc_C2 = nc_B;
+    float *gC2;
+    cu_safe_falloc(&gC2, gnr_C2*gnc_C2);
+    begin = clock();
+    gmm2(gA, nr_A, nc_A, gB, nr_B, nc_B, gC2, gnr_C2, gnc_C2);
+    end = clock();
+    tgmm2 = ((float)(end-begin))/((float)(CLOCKS_PER_SEC)/1.0e9);
+    float *vC2 = (float*) safe_calloc(gnr_C2*gnc_C2, sizeof(float));
+    memcpy_dtoh(vC2, gC2, gnr_C2*gnc_C2);
+    for(size_t i=0; i<gnr_C2*gnc_C2; i++) {
+        float diff = vC2[i]-C1[i];
+        err_gmm2 += diff*diff;
+    }
+    
     // print result
-    printf("tmm1: %fns\n", tmm1/1e3);
-    printf("tmm2: %fns\n", tmm2/1e3);
-    printf("tmm3: %fns\n", tmm3/1e3);
-    printf("tgmm1: %fns\n", tgmm1/1e3);
+    printf("tmm1: %fs\n", tmm1/1e9);
+    printf("tmm2: %fs\n", tmm2/1e9);
+    printf("tmm3: %fs\n", tmm3/1e9);
+    printf("tgmm1: %fs\n", tgmm1/1e9);
+    printf("tgmm2: %fs\n", tgmm2/1e9);
     printf("err_gmm1: %f\n", err_gmm1);
+    printf("err_gmm2: %f\n", err_gmm2);
     printf("err_mm4: %f\n", err_mm4);
 }
